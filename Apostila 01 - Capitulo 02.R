@@ -51,8 +51,8 @@ pbinom(q = 2,size = 10, prob = 0.5)
 ##################################
 #### DISTRIBUIÇÃO GEOMÉTRICA ####
 ##################################
-#Exemplo: Definindo como sucesso o cliente comprar, e supondo que a probabilidade de sucesso é 50%.
-#Qual a probabilidade da primeira venda ocorrer quando o quinto cliente entrar na loja?
+# Exemplo: Definindo como sucesso o cliente comprar, e supondo que a probabilidade de sucesso é 50%.
+# Qual a probabilidade da primeira venda ocorrer quando o quinto cliente entrar na loja?
 
 dgeom(x = 5, prob = 0.5)
 #Onde:

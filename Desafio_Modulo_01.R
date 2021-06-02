@@ -1,6 +1,6 @@
 ############################################################################################################
-###########                 Desafio - AED         #########################
-#############          IGTI - Professor Mairon Chaves      ###########################
+########### Desafio - AED #########################
+############# IGTI - Professor Mairon Chaves ###########################
 ############################################################################################################
 
 rm(list = ls())
@@ -51,41 +51,72 @@ dados <- data.frame(
                             "Nao", "Nao", "Nao", "Nao", "Nao", "Nao")
 )
 
+# Concluído: Dados 29 obs. de 6 variaveis
+
 View(dados)
 
 
 
 #Explore a variável resposta, que é o Consumo, responda:
 
-#Histograma do consumo
+# Histograma do consumo
 hist(dados$Consumo)
 
-#Boxplot do consumo
+# 01 Pelo histograma, você diria que a variável segue uma distribuição normal?  
+# Resposta: Não. 
+
+############ ############ ############ ############ ############ ############ 
+
+
+# Boxplot do consumo
 boxplot(dados$Consumo)
 
-#Estatisticas descritivas do consumo
+# 02 Pelo boxplot, você consegue visualizar algum outlier?  
+# Reposta: Sim, há pontos outliers acima do limite superior.
+
+############ ############ ############ ############ ############ ############ 
+
+# Estatisticas descritivas do consumo
 summary(dados$Consumo)
+# 1st Qu.: 3903
+# 3rd Qu.: 13444
 
+# 03 Qual é o valor do primeiro quartil e terceiro quartil? 
+# Reposta: Os valores do primeiro e terceiro quartil são 3903 e 13444, 
+# respectivamente, significa que 25% dos clientes consomem até 3903 e 75% dos clientes consomem até 13444.
+ 
+############ ############ ############ ############ ############ ############ 
 
-
-# Suspeita-se que a variável Estado Civil está associada com o fato do cliente 
-# Possuir Imóvel Próprio. Investigue a relação entre essas duas variáveis e 
-# responda: 
-
+# 04 Suspeita-se que a variável Estado Civil está associada com o fato de o cliente 
+# Possuir Imóvel Próprio. 
+# Investigue a relação entre essas duas variáveis e responda: 
+# Através do teste qui-quadrado, existe relação significativa entre o Estado Civil 
+# e o fato do cliente Possuir Imóvel Próprio? 
+# Justifique sua resposta.  
+# Adote 90% de confiança ao realizar suas interpretações. 
 
 # Gera tabela de contigencia entre Estado Civil e Possui Imovel Proprio
 tabela_contigencia <- table(dados$Estado_Civil, dados$Possui_Imovel_Proprio)
-
 tabela_contigencia
-
 plot(tabela_contigencia)
 
 # Realiza  teste qui-quadrado
 chisq.test(tabela_contigencia) #ignore a mensagem de warning de vermelho
 
+# p-value = 0.7287
 
+# Resposta: 
+# Ao p valor de 72,87%, não há evidências para rejeitar a hipótese nula de independência 
+# entre as variáveis, ou seja, o Estado Civil não tem associação significativa com o
+# fato de o cliente ter ou não ter Imóvel Próprio.
 
-#Explore a relação entre as variáveis Consumo e Possui Imóvel Próprio, responda:
+############ ############ ############ ############ ############ ############ 
+
+# 05 Explore a relação entre as variáveis Consumo e Possui Imóvel Próprio, e responda: 
+# Através de um teste t de Student para amostras independentes, 
+# existe diferença significativa entre o consumo médio do público que possui 
+# imóvel próprio quando comparado com o consumo médio do público não possui 
+# imóvel próprio? Adote 95% de confiança ao realizar suas interpretações. 
 
 boxplot(dados$Consumo ~ dados$Possui_Imovel_Proprio)
 
@@ -96,28 +127,173 @@ t.test(dados$Consumo ~ dados$Possui_Imovel_Proprio ,
        conf.level = 0.95 #95% de confianca
 )
 
+# p-value = 0.7226
+# média não = 12391.30 
+# média sim = 10862.78 
+# hipótese alternativa: a verdadeira diferença nas médias não é igual a 0
 
-# Explore a relação entre as variáveis Consumo e Idade, e responda:
+# Reposta: Ao p valor de 72,26%, não há evidências para rejeitar a 
+# hipótese nula de igualdade de médias, ou seja, a média do consumo de quem tem imóvel 
+# próprio não é estatisticamente diferente da média de consumo de quem não tem imóvel 
+# próprio.
+
+############ ############ ############ ############ ############ ############ 
+
+
+# 06 Explore a relação entre as variáveis Consumo e Idade, e responda: 
+# Pelo gráfico de dispersão, você identifica que existe relação linear entre o 
+# Consumo e a Idade? Se sim, a relação é positiva ou negativa? 
 
 plot(y = dados$Consumo ,
      x = dados$Idade,
-     pch = 16)
+     pch = 16) 
+# Gráfico apresenta uma linha subindo.
 
 # Coeficiente de correlacao
 cor(dados$Consumo, dados$Idade)
+# [1] 0.939904 (positivo)
+
+
+# Reposta: 
+# Sim, existe uma correlação linear positiva, pois à medida que a idade aumenta 
+# o consumo também aumenta.
+
+
+############ ############ ############ ############ ############ ############ 
+
+# 07 Explore a relação entre as variáveis Consumo e Idade, e responda: 
+# Obtenha o valor do coeficiente de correlação linear de Pearson entre o 
+# Consumo e a Idade e interprete. Marque a alternativa CORRETA. 
+
+cor(dados$Consumo, dados$Idade)
+# [1] 0.939904 (positivo)
+
+# Resposta: 
+# O coeficiente de correlação linear de Pearson entre o Consumo e a Idade 
+# é de 0,93, que é uma correlação positiva forte.
+
+
+############ ############ ############ ############ ############ ############ 
+
+
+# 08 Explore a relação entre as variáveis Consumo e Idade, e responda: 
+# Se tentarmos utilizar somente a Idade para prever o Consumo, 
+# o quanto da variação do Consumo a variável Idade consegue explicar? 
+# Em outras palavras, interpretar o R2 da regressão linear do Consumo 
+# em função da Idade. 
 
 # Ajuste regressao linear do Consumo em funcao da Idade
 regressao_linear <- lm(Consumo ~ Idade, data = dados)
 summary(regressao_linear)
 
+
+# Multiple R-squared:  0.8834
+
+# Reposta: 
+# O R2 é de 88,34%, ou seja, a Idade consegue explicar 88,34% 
+# da variação do Consumo.
+
+
+############ ############ ############ ############ ############ ############ 
+
+# 09 Explore a relação entre as variáveis Consumo e Idade, e responda:
+# Execute um teste de normalidade para regressão linear entre 
+# Consumo e Idade e, de acordo com os resultados, 
+# informe se os resíduos seguem ou não seguem uma distribuição normal. 
+# Adote 95% de confiança.
+
 # Teste de normalidade para os residuos da regressao
 shapiro.test(regressao_linear$residuals)
+# p-value = 0.2415
+
+# Ao p valor de 24,15%, não há evidências para rejeitar a hipótese 
+# de normalidade,ou seja, os resíduos seguem uma distribuição normal.
+
+############ ############ ############ ############ ############ ############ 
+
+# 10 Explore a variável Renda Mensal e responda: 
+# Qual o valor do primeiro quartil e qual a sua interpretação CORRETA? 
 
 # Explore a variavel Renda Mensal
 summary(dados$Renda_Mensal)
+# 1st Qu: 2292
 
-# Explore a relação entre as variáveis Consumo e Idade, e responda:
+# Reposta: 
+# O primeiro quartil é 2292, isso nos diz que 25% dos clientes 
+# têm renda mensal de até 2292.
+
+############ ############ ############ ############ ############ ############ 
+
+# 11 Explore a variável Renda Mensal e responda: 
+# Qual o valor da mediana e qual a sua interpretação CORRETA? 
+
+summary(dados$Renda_Mensal)
+# Median : 3576
+
+# Reposta:
+# O valor da mediana é 3576, isso nos diz que 50% dos clientes têm renda 
+# até 3576 e os outros 50% têm renda maior que 3576.
+
+############ ############ ############ ############ ############ ############ 
+
+
+# 12 Ajuste uma Regressão linear do Consumo em função da Idade e 
+# Renda Mensal, e responda: 
+# O modelo de regressão linear ajustado é válido? 
 
 # Regressao linear do Consumo em funcao da Idade e Renda Mensal
-regressao_linear <- lm(Consumo ~ Idade + Renda_Mensal, data = dados)
+regressao_linear <- lm(Consumo ~ Idade + 
+                       Renda_Mensal, 
+                       data = dados)
 summary(regressao_linear)
+
+# Signif. codes:  0 ‘***’
+
+# Sim, pois p valor do teste F é aproximadamente zero, 
+# então há evidências para rejeitar a hipótese de que o modelo 
+# ajustado não é válido.
+
+
+############ ############ ############ ############ ############ ############ 
+
+# 13 Ajuste uma Regressão linear do Consumo em função da Idade e 
+# Renda Mensal, e responda: 
+# Marque a alternativa com a interpretação CORRETA do coeficiente Beta 
+# da variável Idade. 
+
+regressao_linear <- lm(Consumo ~ Idade + 
+                       Renda_Mensal, 
+                       data = dados)
+summary(regressao_linear)
+
+
+# Idade 3.481e+02  
+
+# O coeficiente Beta da variável idade é de 3,48, ou seja,
+# mantendo as demais variáveis constantes, a cada aumento unitário na idade, 
+# o consumo aumenta em média 3,48 unidades.
+
+
+############ ############ ############ ############ ############ ############ 
+
+# 14 Ajuste uma Regressão linear do Consumo em função da Idade e Renda Mensal,
+# e responda: 
+# Marque a alternativa com a interpretação CORRETA do coeficiente Beta da 
+# variável Renda Mensal. 
+
+# Renda_Mensal  2.625e+00
+
+# Reposta: O coeficiente Beta da variável Renda Mensal é de 2,62, 
+# ou seja, mantendo as demais variáveis constantes, a cada aumento unitário 
+# na Renda Mensal, o consumo aumenta, em média, 2,62 unidades.
+
+
+############ ############ ############ ############ ############ ############ 
+
+
+# 15 Ajuste uma Regressão linear do Consumo em função da Idade 
+# e Renda Mensal, e responda: 
+# Como os valores t são obtidos? (coluna t value) 
+
+
+# Reposta: Dividindo a coluna Estimate pela coluna Std. Error.
